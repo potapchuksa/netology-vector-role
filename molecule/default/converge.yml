@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Create mock clickhouse host for template compilation
+      ansible.builtin.add_host:
+        name: "clickhouse-01"
+        ansible_host: "127.0.0.1"
+      changed_when: false
+
+    - name: Include vector-role
+      ansible.builtin.include_role:
+        name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"

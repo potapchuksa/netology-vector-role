@@ -1,0 +1,28 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Check binary
+      ansible.builtin.stat:
+        path: /usr/local/bin/vector
+      register: bin
+    - name: Assert binary
+      ansible.builtin.assert:
+        that: bin.stat.exists
+
+    - name: Check config
+      ansible.builtin.stat:
+        path: /etc/vector/vector.yml
+      register: cfg
+    - name: Assert config
+      ansible.builtin.assert:
+        that: cfg.stat.exists
+
+    - name: Check service
+      ansible.builtin.service_facts:
+    - name: Assert service
+      ansible.builtin.assert:
+        that:
+          - "'vector.service' in services"
+          - "services['vector.service'].state == 'running'"
